@@ -1,0 +1,33 @@
+note over selain:
+käyttäjä kirjoittaa tekstikenttään
+"foobarzot" ja painaa kaasua
+end note
+
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+
+note over palvelin:
+palvelin tallettaa muistiinpanon ja
+uudelleenohjaa selaimen takaisin
+sovellussivulle
+end note
+
+palvelin-->selain: 302 Found, Location: https://fullstack-exampleapp.herokuapp.com/notes
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+palvelin-->selain: HTML-koodia
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+palvelin-->selain: main.js
+
+note over selain:
+selain alkaa suorittaa js-koodia
+joka pyytää JSON-datan palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+palvelin-->selain: [{ ..., { content: "foobarzot", date: "2019-11-11" }]
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle
+end note

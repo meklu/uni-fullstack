@@ -1,0 +1,22 @@
+note over selain:
+Käyttäjä kirjoittaa tekstikenttään
+"foobarzot" ja painaa kaasua.
+selain lisää muistiinpanon listan
+perään.
+Selain suorittaa sovelluksen
+lomakkeelle asettaman tapahtumakäsittelijän,
+joka estää normaalin lomaketoiminnon.
+Tapahtumakäsittelijä laittaa
+muistiinpanon menemään JSON-objektina
+palvelimelle selaimen generoiman
+aikaleiman kera, sellaisena kuin
+se palvelimellakin esiintyy.
+end note
+
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+
+note over palvelin:
+palvelin tallettaa muistiinpanon
+end note
+
+palvelin-->selain: 201 Created, {"message":"note created"}
