@@ -40,9 +40,14 @@ const Stats = ({feedback}) => {
 		positive: positive
 	}
 	const statKeys = Object.keys(stats)
-	return [
+	const head = [
 		<Heading key="stathead" text="statistics" />
-	].concat(statKeys.map((k) => <p key={'stat_' + k}>{k} {stats[k]}</p>))
+	]
+	if (all > 0) {
+		return head.concat(statKeys.map((k) => <p key={'stat_' + k}>{k} {stats[k]}</p>))
+	} else {
+		return head.concat([<p key="stat_empty">No feedback given</p>])
+	}
 }
 
 const App = () => {
