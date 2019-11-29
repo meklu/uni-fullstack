@@ -23,7 +23,7 @@ const Feedback = ({feedback, setFeedback}) => {
 	}))
 }
 
-const Statistic = ({text, value}) => <p>{text} {value}</p>
+const Statistic = ({text, value}) => <tr><td>{text}</td><td>{value}</td></tr>
 
 const Stats = ({feedback}) => {
 	const fbKeys = Object.keys(feedback)
@@ -46,7 +46,15 @@ const Stats = ({feedback}) => {
 		<Heading key="stathead" text="statistics" />
 	]
 	if (all > 0) {
-		return head.concat(statKeys.map((k) => <Statistic key={'stat_' + k} text={k} value={stats[k]} />))
+		return head.concat(
+			[
+				<table key="stattable">
+					<tbody>
+						{statKeys.map((k) => <Statistic key={'stat_' + k} text={k} value={stats[k]} />)}
+					</tbody>
+				</table>
+			]
+		)
 	} else {
 		return head.concat([<p key="stat_empty">No feedback given</p>])
 	}
