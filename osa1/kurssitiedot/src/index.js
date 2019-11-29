@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 
 const Header = (props) => <h1>{props.course}</h1>
 
-const Part = (props) => <p>{props.part} {props.exercises}</p>
+const Part = (props) => <p>{props.name} {props.exercises}</p>
 
 const Content = (props) => {
-	return props.parts.map(p => <Part part={p.part} exercises={p.exercises} />)
+	return props.parts.map(p => <Part name={p.name} exercises={p.exercises} />)
 }
 
 const Total = (props) => {
@@ -17,9 +17,9 @@ const Total = (props) => {
 const App = () => {
 	const course = 'Half Stack application development'
 	const parts = [
-		{part: 'Fundamentals of React', exercises: 10},
-		{part: 'Using props to pass data', exercises: 7},
-		{part: 'State of a component', exercises: 14}
+		{name: 'Fundamentals of React', exercises: 10},
+		{name: 'Using props to pass data', exercises: 7},
+		{name: 'State of a component', exercises: 14}
 	]
 
 	return (
