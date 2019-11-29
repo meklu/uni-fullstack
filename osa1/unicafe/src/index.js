@@ -24,9 +24,25 @@ const Feedback = ({feedback, setFeedback}) => {
 }
 
 const Stats = ({feedback}) => {
+	const fbKeys = Object.keys(feedback)
+	const worth = {
+		good: 1,
+		neutral: 0,
+		bad: -1
+	}
+	const all = fbKeys.map((k) => feedback[k]).reduce((a, b) => a + b, 0)
+	const average = fbKeys.map((k) => feedback[k] * worth[k]).reduce((a, b) => a + b, 0) / all
+	const positive = (100 * feedback.good / all) + " %"
+	const stats = {
+		...feedback,
+		all: all,
+		average: average,
+		positive: positive
+	}
+	const statKeys = Object.keys(stats)
 	return [
 		<Heading key="stathead" text="statistics" />
-	].concat(Object.keys(feedback).map((k) => <p key={'stat_' + k}>{k} {feedback[k]}</p>))
+	].concat(statKeys.map((k) => <p key={'stat_' + k}>{k} {stats[k]}</p>))
 }
 
 const App = () => {
