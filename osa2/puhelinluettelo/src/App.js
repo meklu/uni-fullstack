@@ -15,6 +15,24 @@ const App = () => {
 		? persons
 		: persons.filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
 
+	const deletePerson = (person) => {
+		if (!window.confirm(`Are you sure you want to delete ${person.name}?`)) {
+			return
+		}
+		console.log('deleting', person)
+
+		const drop = () => setPersons(persons.filter(p => p.id !== person.id))
+
+		personService.delete(person.id).then(resp => {
+			console.log('deletion succeeded', resp)
+			drop()
+		}).catch((resp) => {
+			console.log('deletion failed', resp)
+			window.alert(`Failed to delete ${person.name} - no such entity`)
+			drop()
+		})
+	}
+
 	useEffect(() => {
 		personService.getAll().then((initialP) => {
 			setPersons(initialP)
@@ -28,7 +46,7 @@ const App = () => {
 			<h3>Add new</h3>
 			<PersonForm persons={persons} setPersons={setPersons} personService={personService} />
 			<h2>Numbers</h2>
-			<Persons persons={personsShown} />
+			<Persons persons={personsShown} deletePerson={deletePerson} />
 		</div>
        )
 }
