@@ -11,9 +11,15 @@ const App = () => {
 		setFilter(e.target.value)
 	}
 
-	const countriesShown = (filter === '')
+	const countriesFirstPass = (filter === '')
 		? []
 		: countries.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()))
+
+	const countriesPrecise = countriesFirstPass.filter(c => c.name.toLowerCase() === filter.toLowerCase())
+
+	const countriesShown = (countriesPrecise.length > 0)
+		? countriesPrecise
+		: countriesFirstPass
 
 	useEffect(() => {
 		axios.get("https://restcountries.eu/rest/v2/all").then((resp) => {
