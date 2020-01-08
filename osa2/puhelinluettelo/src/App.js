@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+
+import personService from './services/personService'
 
 import Search from './components/Search'
 import Persons from './components/Persons'
@@ -15,8 +16,8 @@ const App = () => {
 		: persons.filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
 
 	useEffect(() => {
-		axios.get("http://localhost:3001/persons").then((resp) => {
-			setPersons(resp.data)
+		personService.getAll().then((initialP) => {
+			setPersons(initialP)
 		})
 	}, [])
 
@@ -25,7 +26,7 @@ const App = () => {
 			<h2>Phonebook</h2>
 			<Search search={search} setSearch={setSearch} />
 			<h3>Add new</h3>
-			<PersonForm persons={persons} setPersons={setPersons} />
+			<PersonForm persons={persons} setPersons={setPersons} personService={personService} />
 			<h2>Numbers</h2>
 			<Persons persons={personsShown} />
 		</div>

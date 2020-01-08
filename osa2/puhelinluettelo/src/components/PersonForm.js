@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 const PersonForm = (props) => {
-	const { persons, setPersons } = props
+	const { persons, setPersons, personService } = props
 
 	const [ newName, setNewName ] = useState('')
 	const [ newNumber, setNewNumber ] = useState('')
@@ -35,9 +35,11 @@ const PersonForm = (props) => {
 			alert(`Person ${newPerson.name} already in phonebook!`)
 			return
 		}
-		setPersons(persons.concat(newPerson))
-		setNewName('')
-		setNewNumber('')
+		personService.create(newPerson).then(p => {
+			setPersons(persons.concat(p))
+			setNewName('')
+			setNewNumber('')
+		})
 	}
 
 	return (

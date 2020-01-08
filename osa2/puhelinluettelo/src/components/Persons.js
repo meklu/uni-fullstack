@@ -4,7 +4,7 @@ import Person from './Person'
 
 const Persons = (props) => {
 	const { persons } = props
-	return persons.map(p => <Person key={p.name} person={p} />)
+	return persons.map(p => <Person key={p.id} person={p} />)
 }
 
 export default Persons
