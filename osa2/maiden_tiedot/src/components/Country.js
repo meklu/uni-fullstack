@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-// just export your api key as a string from /src/weatherApiKey.js
+// just export your openweathermap api key as a string from /src/weatherApiKey.js
 import weatherApiKey from '../weatherApiKey.js'
 
 const Weather = (props) => {
@@ -58,6 +58,10 @@ const Country = (props) => {
 	const [ weather, setWeather ] = useState(null)
 
 	useEffect(() => {
+		if (typeof (weatherApiKey) !== 'string' || weatherApiKey === '') {
+			console.log('no weatherApiKey set! see /src/weatherApiKey.example.js for instructions')
+			return
+		}
 		const api_url = `https://api.openweathermap.org/data/2.5/weather/?appid=${weatherApiKey}&q=${country.capital},${country.alpha2Code}`
 		const wkey = `weather_${country.alpha2Code}`
 
