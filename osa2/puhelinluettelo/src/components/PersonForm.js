@@ -31,15 +31,28 @@ const PersonForm = (props) => {
 		if (fail) {
 			return
 		}
-		if (persons.map(p => p.name).includes(newPerson.name)) {
-			alert(`Person ${newPerson.name} already in phonebook!`)
-			return
+		const fp = persons.find(p => p.name === newPerson.name)
+		if (fp) {
+			if (!window.confirm(`Person ${newPerson.name} already in phonebook! Replace the number with this new one?`)) {
+			       return
+			}
+			personService.update(fp.id, {...fp, number: newPerson.number}).then((resp) => {
+				console.log('successfully updated', resp)
+				setPersons(persons.map(p => p.id !== resp.id ? p : resp))
+				setNewName('')
+				setNewNumber('')
+			}).catch(resp => {
+				console.log('failed to update', resp)
+				alert(`Failed to update entry for ${fp.name}`)
+				setPersons(persons.filter(p => p.id !== fp.id))
+			})
+		} else {
+			personService.create(newPerson).then(p => {
+				setPersons(persons.concat(p))
+				setNewName('')
+				setNewNumber('')
+			})
 		}
-		personService.create(newPerson).then(p => {
-			setPersons(persons.concat(p))
-			setNewName('')
-			setNewNumber('')
-		})
 	}
 
 	return (
