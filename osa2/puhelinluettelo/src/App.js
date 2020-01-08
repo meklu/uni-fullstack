@@ -6,9 +6,13 @@ const App = (props) => {
 	const [ persons, setPersons] = useState([
 		{ name: 'Arto Hellas', number: 112 }
 	])
+	const [ search, setSearch ] = useState('')
 	const [ newName, setNewName ] = useState('')
 	const [ newNumber, setNewNumber ] = useState('')
 
+	const searchEdited = (e) => {
+		setSearch(e.target.value)
+	}
 	const nameEdited = (e) => {
 		setNewName(e.target.value)
 	}
@@ -43,9 +47,15 @@ const App = (props) => {
 		setNewNumber('')
 	}
 
+	const personsShown = (search === '')
+		? persons
+		: persons.filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
+
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			<p>filter names with: <input value={search} onChange={searchEdited} /></p>
+			<h3>Add new</h3>
 			<form onSubmit={personAdded}>
 				<div>
 					<p>name: <input value={newName} onChange={nameEdited} /></p>
@@ -56,7 +66,7 @@ const App = (props) => {
 				</div>
 			</form>
 			<h2>Numbers</h2>
-			{persons.map(p => <Person key={p.name} person={p} />)}
+			{personsShown.map(p => <Person key={p.name} person={p} />)}
 		</div>
        )
 }
