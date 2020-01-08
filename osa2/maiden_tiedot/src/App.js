@@ -31,7 +31,7 @@ const App = () => {
 	return (
 		<div>
 			<p>find countries: <input value={filter} onChange={filterEdited} /></p>
-			<Countries countries={countriesShown} />
+			<Countries setFilter={setFilter} countries={countriesShown} />
 		</div>
 	)
 }
