@@ -48,7 +48,12 @@ const Weather = (props) => {
 			<h2>Weather in {country.capital}</h2>
 			<p><strong>temperature:</strong> {k2c(weather.main.temp)}°C, feels like {k2c(weather.main.feels_like)}°C</p>
 			<p><img src={icon_url} alt={`${weather.weather.main}: ${weather.weather.description}`} /></p>
-			<p><strong>wind:</strong> {deg2card(weather.wind.deg)} ({weather.wind.deg}°) @ {weather.wind.speed} m/s</p>
+			{(weather.wind && typeof (weather.wind.speed) !== 'undefined')
+				? <p><strong>wind:</strong> {typeof (weather.wind.deg) !== 'undefined'
+					? <>{deg2card(weather.wind.deg)} ({weather.wind.deg}°)</>
+					: <></>
+				} @ {weather.wind.speed} m/s</p>
+				: <></>}
 		</div>
 	)
 }
