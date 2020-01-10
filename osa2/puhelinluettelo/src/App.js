@@ -18,6 +18,11 @@ const App = () => {
 		? persons
 		: persons.filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
 
+	const notify = (msg, succ) => {
+		setMessage({msg, succ})
+		setTimeout(() => setMessage(null), 5000)
+	}
+
 	const deletePerson = (person) => {
 		if (!window.confirm(`Are you sure you want to delete ${person.name}?`)) {
 			return
@@ -30,31 +35,24 @@ const App = () => {
 			console.log('deletion succeeded', resp)
 			notify(`Successfully deleted ${person.name}`, true)
 			drop()
-		}).catch((resp) => {
-			console.log('deletion failed', resp)
-			notify(`Failed to delete ${person.name} - no such entity`, false)
+		}).catch((err) => {
+			let emsg = err.response.data.error || 'unknown error'
+			console.log('deletion failed', err.response.data)
+			notify(emsg, false)
 			drop()
 		})
 	}
 
-	const notify = (msg, succ) => {
-		setMessage({msg, succ})
-		setTimeout(() => setMessage(null), 5000)
-	}
-
 	const addPerson = (newPerson, onSuccess) => {
-		let fail = false
-		let failmsg = ''
-		if (newPerson.name === '') {
-			failmsg = "Name can't be empty!"
-			fail = true
+		let fail = []
+		if (newPerson.name.length < 3) {
+			fail = fail.concat("Name must be at least 3 characters long!")
 		}
-		if (!/^\+?[0-9-]+$/.test(newPerson.number)) {
-			failmsg += "\nEnter a valid number!"
-			fail = true
+		if (newPerson.number.length < 8 || !/^\+?[0-9-]+$/.test(newPerson.number)) {
+			fail = fail.concat("Enter a valid number!")
 		}
-		if (fail) {
-			notify(failmsg, false)
+		if (fail.length > 0) {
+			notify(fail.join('\n'), false)
 			return
 		}
 		const fp = persons.find(p => p.name === newPerson.name)
@@ -67,9 +65,10 @@ const App = () => {
 				setPersons(persons.map(p => p.id !== resp.id ? p : resp))
 				notify(`Successfully updated the entry for ${resp.name}`, true)
 				onSuccess()
-			}).catch(resp => {
-				console.log('failed to update', resp)
-				notify(`Failed to update entry for ${fp.name} since it's already deleted`, false)
+			}).catch(err => {
+				let emsg = err.response.data.error || 'unknown error'
+				console.log('failed to update', err.response.data)
+				notify(emsg, false)
 				setPersons(persons.filter(p => p.id !== fp.id))
 			})
 		} else {
@@ -77,6 +76,10 @@ const App = () => {
 				notify(`Successfully added ${newPerson.name}`, true)
 				setPersons(persons.concat(p))
 				onSuccess()
+			}).catch(err => {
+				let emsg = err.response.data.error || 'unknown error'
+				console.log('failed to create', err.response.data)
+				notify(emsg, false)
 			})
 		}
 	}
@@ -84,6 +87,9 @@ const App = () => {
 	useEffect(() => {
 		personService.getAll().then((initialP) => {
 			setPersons(initialP)
+		}).catch(err  => {
+			let emsg = err.response.data.error || 'unknown error'
+			notify(emsg, false)
 		})
 	}, [])
 
